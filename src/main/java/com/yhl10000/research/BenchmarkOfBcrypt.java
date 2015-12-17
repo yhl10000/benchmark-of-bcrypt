@@ -20,17 +20,20 @@ public class BenchmarkOfBcrypt {
         StopWatch stopWatch = new StopWatch(sb.toString());
 
         for (int i = 8; i < 15; i++) {
-            getDurationBasedOnCost(i, stopWatch);
+            benchmarkBasedOnCost(i, stopWatch);
         }
 
         System.out.println(stopWatch.prettyPrint());
-
     }
 
-    static void getDurationBasedOnCost(int cost, StopWatch stopWatch)
+    static void benchmarkBasedOnCost(int cost, StopWatch stopWatch)
     {
-        stopWatch.start(new StringBuilder().append("the cost is ").append(cost).toString());
+        stopWatch.start(new StringBuilder().append("HASH: the cost is ").append(cost).toString());
         String hash = new BCryptPasswordEncoder(cost).encode(RandomStringUtils.randomAscii(10));
+        stopWatch.stop();
+
+        stopWatch.start(new StringBuilder().append("VERIFY: the cost is ").append(cost).toString());
+        new BCryptPasswordEncoder().matches(RandomStringUtils.randomAscii(10), hash);
         stopWatch.stop();
     }
 }
